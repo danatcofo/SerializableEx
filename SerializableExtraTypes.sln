@@ -1,85 +1,29 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializableExtraTypes", "SerializableExtraTypes\SerializableExtraTypes.csproj", "{62ED0A84-CE55-481E-A9AA-6E9147AA9955}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLibraryOne", "TestLibraryOne\TestLibraryOne.csproj", "{C6E5A342-2EFA-4FB7-BE4C-050044ECA321}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{3370A14A-B10F-4402-8E26-61ED6F079A89}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLibraryTwo", "TestLibraryTwo\TestLibraryTwo.csproj", "{74D6187B-5425-4DC7-A8E6-60CDEE4A92AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializableExtraTypes.Tests", "SerializableExtraTypes.Tests\SerializableExtraTypes.Tests.csproj", "{F6EC772C-948B-40C8-A4B6-5E8332705317}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8A637D9C-546E-4D4C-8D2C-0E662F8B39FE}"
-	ProjectSection(SolutionItems) = preProject
-		Local.testsettings = Local.testsettings
-		SerializableExtraTypes.vsmdi = SerializableExtraTypes.vsmdi
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLibraryThree", "TestLibraryThree\TestLibraryThree.csproj", "{0A0911CD-586F-4EA0-82FF-83126657FD70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializableExtraTypes", "SerializableExtraTypes\SerializableExtraTypes.csproj", "{E0E7C65B-06B5-43F8-B1F3-8AEEAF7C0013}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 2
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs31
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = SerializableExtraTypes\\SerializableExtraTypes.csproj
 		SccProjectName1 = SerializableExtraTypes
 		SccLocalPath1 = SerializableExtraTypes
-		SccProjectUniqueName2 = TestLibraryOne\\TestLibraryOne.csproj
-		SccProjectTopLevelParentUniqueName2 = SerializableExtraTypes.sln
-		SccProjectName2 = TestLibraryOne
-		SccLocalPath2 = TestLibraryOne
-		SccProjectUniqueName3 = TestLibraryTwo\\TestLibraryTwo.csproj
-		SccProjectTopLevelParentUniqueName3 = SerializableExtraTypes.sln
-		SccProjectName3 = TestLibraryTwo
-		SccLocalPath3 = TestLibraryTwo
-		SccProjectUniqueName4 = SerializableExtraTypes.Tests\\SerializableExtraTypes.Tests.csproj
-		SccProjectName4 = SerializableExtraTypes.Tests
-		SccLocalPath4 = SerializableExtraTypes.Tests
-		SccProjectUniqueName5 = TestLibraryThree\\TestLibraryThree.csproj
-		SccProjectTopLevelParentUniqueName5 = SerializableExtraTypes.sln
-		SccProjectName5 = TestLibraryThree
-		SccLocalPath5 = TestLibraryThree
-	EndGlobalSection
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = SerializableExtraTypes.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{62ED0A84-CE55-481E-A9AA-6E9147AA9955}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62ED0A84-CE55-481E-A9AA-6E9147AA9955}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62ED0A84-CE55-481E-A9AA-6E9147AA9955}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62ED0A84-CE55-481E-A9AA-6E9147AA9955}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6E5A342-2EFA-4FB7-BE4C-050044ECA321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6E5A342-2EFA-4FB7-BE4C-050044ECA321}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6E5A342-2EFA-4FB7-BE4C-050044ECA321}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6E5A342-2EFA-4FB7-BE4C-050044ECA321}.Release|Any CPU.Build.0 = Release|Any CPU
-		{74D6187B-5425-4DC7-A8E6-60CDEE4A92AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74D6187B-5425-4DC7-A8E6-60CDEE4A92AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74D6187B-5425-4DC7-A8E6-60CDEE4A92AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74D6187B-5425-4DC7-A8E6-60CDEE4A92AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6EC772C-948B-40C8-A4B6-5E8332705317}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6EC772C-948B-40C8-A4B6-5E8332705317}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6EC772C-948B-40C8-A4B6-5E8332705317}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6EC772C-948B-40C8-A4B6-5E8332705317}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A0911CD-586F-4EA0-82FF-83126657FD70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A0911CD-586F-4EA0-82FF-83126657FD70}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A0911CD-586F-4EA0-82FF-83126657FD70}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A0911CD-586F-4EA0-82FF-83126657FD70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0E7C65B-06B5-43F8-B1F3-8AEEAF7C0013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0E7C65B-06B5-43F8-B1F3-8AEEAF7C0013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0E7C65B-06B5-43F8-B1F3-8AEEAF7C0013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0E7C65B-06B5-43F8-B1F3-8AEEAF7C0013}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{C6E5A342-2EFA-4FB7-BE4C-050044ECA321} = {3370A14A-B10F-4402-8E26-61ED6F079A89}
-		{74D6187B-5425-4DC7-A8E6-60CDEE4A92AE} = {3370A14A-B10F-4402-8E26-61ED6F079A89}
-		{0A0911CD-586F-4EA0-82FF-83126657FD70} = {3370A14A-B10F-4402-8E26-61ED6F079A89}
 	EndGlobalSection
 EndGlobal

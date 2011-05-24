@@ -1,31 +1,36 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
-namespace System.Xml.Serialization
+namespace SerializableExtraTypes
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    public class SerializableExtraTypeAttribute : Attribute
+    /// <summary>
+    /// Associates this class as an available extra Type for serialization. Use with TripleI.Framework.Xml.SerializableExtraTypes
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true)]
+    public sealed class SerializableExtraTypeAttribute: Attribute
     {
-        public SerializableExtraTypeAttribute(Type t) 
-            : base() { _Types = new Type[] { t }; }
-        public SerializableExtraTypeAttribute(Type t1, Type t2) 
-            : base() { _Types = new Type[] { t1, t2 }; }
-        public SerializableExtraTypeAttribute(Type t1, Type t2, Type t3) 
-            : base() { _Types = new Type[] { t1, t2, t3, }; }
-        public SerializableExtraTypeAttribute(Type t1, Type t2, Type t3, Type t4) 
-            : base() { _Types = new Type[] { t1, t2, t3, t4, }; }
-        public SerializableExtraTypeAttribute(Type t1, Type t2, Type t3, Type t4, Type t5) 
-            : base() { _Types = new Type[] { t1, t2, t3, t4, t5, }; }
-        public SerializableExtraTypeAttribute(Type t1, Type t2, Type t3, Type t4, Type t5, Type t6) 
-            : base() { _Types = new Type[] { t1, t2, t3, t4, t5, t6, }; }
+        /// <summary>
+        /// Associates the adorned class with the given Type.  Any derived classes will also be associated.
+        /// </summary>
+        /// <param name="type">The Type that the class will be associated with. Type of interface is not supported.</param>
+        public SerializableExtraTypeAttribute(Type type)
+            : base()
+        { _Types.Add(type); }
 
-        private IEnumerable<Type> _Types = null;
+        /// <summary>
+        /// Associates the adorned class with the given Types.  Any derived classes will also be associated.
+        /// </summary>
+        /// <param name="types">The Types that the class will be associated with. Type of interface is not supported.</param>
+        public SerializableExtraTypeAttribute(Type[] types)
+            : base()
+        { _Types.AddRange(types); }
 
-        public IEnumerable<Type> Types
-        {
-            get { return _Types; }
-        }
+        private List<Type> _Types = new List<Type>();
+
+        /// <summary>
+        /// The list of Types that the adorned class is associated with.
+        /// </summary>
+        public Type[] Types { get { return _Types.ToArray(); } }
     }
 }
