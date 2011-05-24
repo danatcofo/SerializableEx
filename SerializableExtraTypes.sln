@@ -21,6 +21,30 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLibraryThree", "TestLibraryThree\TestLibraryThree.csproj", "{0A0911CD-586F-4EA0-82FF-83126657FD70}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs31
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = SerializableExtraTypes\\SerializableExtraTypes.csproj
+		SccProjectName1 = SerializableExtraTypes
+		SccLocalPath1 = SerializableExtraTypes
+		SccProjectUniqueName2 = TestLibraryOne\\TestLibraryOne.csproj
+		SccProjectTopLevelParentUniqueName2 = SerializableExtraTypes.sln
+		SccProjectName2 = TestLibraryOne
+		SccLocalPath2 = TestLibraryOne
+		SccProjectUniqueName3 = TestLibraryTwo\\TestLibraryTwo.csproj
+		SccProjectTopLevelParentUniqueName3 = SerializableExtraTypes.sln
+		SccProjectName3 = TestLibraryTwo
+		SccLocalPath3 = TestLibraryTwo
+		SccProjectUniqueName4 = SerializableExtraTypes.Tests\\SerializableExtraTypes.Tests.csproj
+		SccProjectName4 = SerializableExtraTypes.Tests
+		SccLocalPath4 = SerializableExtraTypes.Tests
+		SccProjectUniqueName5 = TestLibraryThree\\TestLibraryThree.csproj
+		SccProjectTopLevelParentUniqueName5 = SerializableExtraTypes.sln
+		SccProjectName5 = TestLibraryThree
+		SccLocalPath5 = TestLibraryThree
+	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SerializableExtraTypes.vsmdi
 	EndGlobalSection
