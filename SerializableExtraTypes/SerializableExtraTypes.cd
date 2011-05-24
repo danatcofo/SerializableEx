@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
+  <Comment CommentText="Helper class for resolving web app bin folder libraries.">
+    <Position X="2.125" Y="0.688" Height="0.75" Width="1.7" />
+  </Comment>
+  <Class Name="Net.AMightyOak.HttpAssemblyLocator">
+    <Position X="0.75" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>AssemblyLocator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Net.AMightyOak.SerializableExtraTypes">
+    <Position X="4.75" Y="3" Width="2" />
+    <AssociationLine Name="Context" Type="Net.AMightyOak.SerializableExtraTypes" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.75" Y="4.25" />
+        <Point X="4.375" Y="4.25" />
+        <Point X="4.375" Y="5.892" />
+        <Point X="6.055" Y="5.892" />
+        <Point X="6.055" Y="5.517" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="1.256" Y="0.268" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AACIAAAAAkAAAAABIAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>SerializableExtraTypes.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="Context" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="System.SerializableExtensionMethods">
+    <Position X="4.5" Y="0.75" Width="2.5" />
+    <Members>
+      <Method Name="Flatten" Hidden="true" />
+      <Method Name="GetTypes" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAIAAEAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SerializableExtensionMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Xml.Serialization.SerializableExtraTypeAttribute">
+    <Position X="0.5" Y="3.75" Width="3.25" />
+    <Members>
+      <Field Name="_Types" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Private" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>SerializableExtraTypeAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
