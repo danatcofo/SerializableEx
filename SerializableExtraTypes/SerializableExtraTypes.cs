@@ -1,156 +1,255 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using System.Reflection;
+using System.IO;
 using System.Xml.Serialization;
+using System.Xml;
 
-namespace Net.AMightyOak
+namespace SerializableExtraTypes
 {
+    /// <summary>
+    /// Utility service for serialization.
+    /// </summary>
     public sealed class SerializableExtraTypes
     {
-        #region Class Parts
-
-        #region Constructor
-
-        private SerializableExtraTypes()
-            : base()
+        /// <summary>
+        /// Serialize an object
+        /// </summary>
+        /// <param name="obj">obj to serialize</param>
+        /// <param name="root">the root type for extraTypes reference</param>
+        /// <returns></returns>
+        public static string Serialize(object obj, Type root)
         {
-            lock (Assemblies)
-            {
-                // Get Currently Loaded Assemblies
-                foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
-                    if (!Assemblies.Keys.Contains(a.FullName)) Assemblies.Add(a.FullName, a);
+            return Serialize(obj, Formatting.None, root);
+        }
 
-                // Get Web Bin directory Assemblies
-                if (System.Web.HttpContext.Current != null)
-                    foreach (var a in new HttpAssemblyLocator().GetBinFolderAssemblies())
-                        if (!Assemblies.Keys.Contains(a.FullName)) Assemblies.Add(a.FullName, a);
+        /// <summary>
+        /// Serialize an object
+        /// </summary>
+        /// <param name="obj">object to serialize</param>
+        /// <param name="format">Format to serialize with</param>
+        /// <param name="root">the root type for an extraTypes reference</param>
+        /// <returns></returns>
+        public static string Serialize(object obj, Formatting format, Type root)
+        {
+            XmlSerializer s = new XmlSerializer(obj.GetType(), SerializableExtraTypes.GetTypes(root));
+            Stream stream = new MemoryStream();
+            XmlTextWriter xw = new XmlTextWriter(stream, null);
+            xw.Formatting = format;
+            s.Serialize(xw, obj);
+            stream.Position = 0;
+            StreamReader rdr = new StreamReader(stream);
+            return rdr.ReadToEnd();
+        }
+
+        /// <summary>
+        /// Deserialize an object
+        /// </summary>
+        /// <param name="xml">xml of the object to deserialize</param>
+        /// <param name="objType">type of object to deserialize</param>
+        /// <param name="root">the root type for extraTypes reference</param>
+        /// <returns></returns>
+        public static object Deserialize(string xml, Type objType, Type root)
+        {
+            XmlSerializer serializer = new XmlSerializer(objType, SerializableExtraTypes.GetTypes(root));
+            StringReader reader = new StringReader(xml);
+            return serializer.Deserialize(reader);
+        }
+
+        /// <summary>
+        /// Register a Type a related to another type for serialization.
+        /// </summary>
+        /// <param name="root">the Type to be related to.</param>
+        /// <param name="relatedType">the Type that will be related</param>
+        public static void RegisterType(Type root, Type relatedType)
+        {
+            // validate that type is not an interface
+            if (root.IsInterface || relatedType.IsInterface)
+                throw new NotSupportedException("TripleI.Framework.Xml.SerializationRegister.RegisterType(Type root, Type relatedType):: root and relatedType do not allow Interface Type definitions");
+
+            // get registration node
+            RegistrationNode node = Instance.InnerList.GetNode(root);
+            if (node == null)
+            {
+                node = new RegistrationNode(root);
+                Instance.InnerList.Add(node);
+            }
+            // add current type
+            if (!relatedType.IsAbstract)
+                if (!node.Types.Contains(relatedType))
+                    node.Types.Add(relatedType);
+
+            // go through asseblies and add children.
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (Assembly assembly in assemblies)
+                foreach (Type t in assembly.GetTypes())
+                    if (t.IsSubclassOf(relatedType) && !t.IsAbstract && !node.Types.Contains(t) && !t.IsGenericTypeDefinition) node.Types.Add(t);
+        }
+        /// <summary>
+        /// Get types that have been related to the root Type
+        /// </summary>
+        /// <param name="root">the root type</param>
+        /// <returns>related types</returns>
+        public static Type[] GetTypes(Type root)
+        {
+            List<Type> returner = new List<Type>(Instance.InnerList.GetRelatedTypes(root));
+            for (int i = 0; i < returner.Count; ++i)
+                AddRelatedTypes(returner, returner[i]);
+            return returner.ToArray();
+        }
+
+        /// <summary>
+        /// private empty constructor for singleton creation
+        /// </summary>
+        private SerializableExtraTypes() { InitializeService(); }
+
+        /// <summary>
+        /// private instance Singlton
+        /// </summary>
+        private static SerializableExtraTypes Instance = new SerializableExtraTypes();
+
+        /// <summary>
+        /// Initializes the instance to discover types and related types.
+        /// </summary>
+        private void InitializeService()
+        {
+            AppDomain.CurrentDomain.AssemblyLoad += new AssemblyLoadEventHandler(CurrentDomain_AssemblyLoad);
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (Assembly assembly in assemblies)
+                this.InitialzeParseAssembly(assembly);
+        }
+        /// <summary>
+        /// Internal register method.
+        /// </summary>
+        /// <param name="root">the Type to be related to.</param>
+        /// <param name="relatedType">the Type that will be related</param>
+        private void InitialzeRegisterType(Type root, Type relatedType)
+        {
+            // validate that type is not an interface
+            if (root.IsInterface || relatedType.IsInterface)
+                throw new NotSupportedException("TripleI.Framework.Xml.SerializationRegister.RegisterType(Type root, Type relatedType):: root and relatedType do not allow Interface Type definitions");
+
+            // get registration node
+            RegistrationNode node = InnerList.GetNode(root);
+            if (node == null)
+            {
+                node = new RegistrationNode(root);
+                InnerList.Add(node);
             }
 
-            foreach (var i in GetAssemblyExtraTypes(Assemblies.Values.ToArray()))
-                _RegisterType(i.Item1, i.Item2);
+            // add current type
+            if (!relatedType.IsAbstract)
+                if (!node.Types.Contains(relatedType))
+                    node.Types.Add(relatedType);
 
-            // Setup Assembly Load for new assemblies
-            AppDomain.CurrentDomain.AssemblyLoad +=
-                new AssemblyLoadEventHandler(delegate(object sender, AssemblyLoadEventArgs args)
-                {
-                    lock (Assemblies)
+            // go through asseblies and add children.
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (Assembly assembly in assemblies)
+                foreach (Type t in assembly.GetTypes())
+                    if (t.IsSubclassOf(relatedType) && !t.IsAbstract && !node.Types.Contains(t) &&  !t.IsGenericTypeDefinition) node.Types.Add(t);
+        }
+        /// <summary>
+        /// Searches an assembly for registerable types durring initialization.
+        /// </summary>
+        /// <param name="assembly">assembly to be searched</param>
+        private void InitialzeParseAssembly(Assembly assembly)
+        {
+            foreach (Type t in assembly.GetTypes())
+            {
+                object[] objects = t.GetCustomAttributes(typeof(SerializableExtraTypeAttribute), false);
+                if (objects != null)
+                    foreach (object o in objects)
                     {
-                        if (!Assemblies.Keys.Contains(args.LoadedAssembly.FullName))
-                            Assemblies.Add(args.LoadedAssembly.FullName, args.LoadedAssembly);
+                        SerializableExtraTypeAttribute attr = (SerializableExtraTypeAttribute)o;
+                        foreach(Type tp in attr.Types)
+                            this.InitialzeRegisterType(tp, t);
                     }
-
-                    foreach (var i in GetAssemblyExtraTypes(args.LoadedAssembly))
-                        SerializableExtraTypes.RegisterType(i.Item1, i.Item2);
-                });
-        }
-
-        private void _RegisterType(Type root, params Type[] related)
-        {
-            //+ Validate types.
-            if (root.IsInterface || related.Count(a => a.IsInterface) > 0)
-                throw new NotSupportedException("Interfaces can not be serialized");
-            // Add missing associations
-
-            lock (Associations)
-            {
-                // root types
-                IEnumerable<Type> r = new List<Type>(related);
-
-                // related children
-                foreach (Type t in related)
-                {
-                    r = r.Union(from z in t.GetTypes(
-                                    (c, d) => d.IsSubclassOf(c)
-                                        && !d.IsAbstract
-                                        && !d.IsGenericTypeDefinition
-                                    , Assemblies.Values.ToArray())
-                                select z);
-                }
-
-                var x = from i in r.Distinct()
-                        join j in Associations.Where(a => a.Key.Item1 == root.FullName)
-                        on i.FullName equals j.Key.Item2 into outer
-                        from k in outer.DefaultIfEmpty()
-                        where k.Key == null
-                        select new
-                        {
-                            k = new Tuple<string, string>(root.FullName, i.FullName),
-                            v = i
-                        };
-
-                foreach (var i in x)
-                    Associations.Add(i.k, i.v);
             }
         }
 
-        // Parent, Child
-        private static IEnumerable<Tuple<Type, Type>> GetAssemblyExtraTypes(params Assembly[] asmblys)
+        /// <summary>
+        /// Searches an assembly for registerable types.
+        /// </summary>
+        /// <param name="assembly">assembly to be searched</param>
+        private static void ParseAssembly(Assembly assembly)
         {
-            foreach (Assembly a in asmblys)
-                foreach (Type t in a.GetTypes())
-                    foreach (SerializableExtraTypeAttribute u in
-                        t.GetCustomAttributes(typeof(SerializableExtraTypeAttribute), true).Cast<SerializableExtraTypeAttribute>())
-                        foreach (Type v in u.Types)
-                            yield return new Tuple<Type, Type>(t, v);
+            foreach (Type t in assembly.GetTypes())
+            {
+                object[] objects = t.GetCustomAttributes(typeof(SerializableExtraTypeAttribute), false);
+                if (objects != null)
+                    foreach (object o in objects)
+                    {
+                        SerializableExtraTypeAttribute attr = (SerializableExtraTypeAttribute)o;
+                        foreach (Type tp in attr.Types)
+                            RegisterType(tp, t);
+                    }
+            }
+        }
+        /// <summary>
+        /// Event handler
+        /// </summary>
+        static void CurrentDomain_AssemblyLoad(object sender, AssemblyLoadEventArgs args)
+        {
+            ParseAssembly(args.LoadedAssembly);
         }
 
-        #endregion Constructor
+        /// <summary>
+        /// Collection of registered types and their related types.
+        /// </summary>
+        private RegistrationCollection InnerList = new RegistrationCollection();
 
-        #region Properties
-
-        // Tuple<string, string> ~ Key<Parent,Child>, Type to include
-        private Dictionary<Tuple<string, string>, Type> Associations = new Dictionary<Tuple<string, string>, Type>();
-        private Dictionary<string, Assembly> Assemblies = new Dictionary<string, Assembly>();
-        private static SerializableExtraTypes Context = new SerializableExtraTypes();
-
-        #endregion Properties
-
-        #endregion Class Parts
-
-        #region Public Methods
-
-        public static IEnumerable<Type> GetTypes(Type type)
+        /// <summary>
+        /// Adds a list of types to be related to the root type.
+        /// </summary>
+        /// <param name="list">Types to be related</param>
+        /// <param name="root">Type to be related to.</param>
+        private static void AddRelatedTypes(List<Type> list, Type root)
         {
-            string root = type.FullName;
-            List<string> roots = new List<string> { root, };
+            List<Type> related = new List<Type>(Instance.InnerList.GetRelatedTypes(root));
+            foreach (Type t in related)
+                if (!list.Contains(t)) list.Add(t);
+        }
 
-            List<Tuple<string, string>> results =
-                new List<Tuple<string, string>>(from i in Context.Associations
-                                                where i.Key.Item1 == root
-                                                select i.Key);
+        /// <summary>
+        /// Holder for registerd types.
+        /// </summary>
+        private class RegistrationNode
+        {
+            public RegistrationNode(Type type) { _Key = type; }
+            private Type _Key;
+            public Type Key { get { return _Key; } }
+            private List<Type> _Types = new List<Type>();
+            public List<Type> Types { get { return _Types; } }
+        }
 
-            if (results.Count() == 0)
-                results = new List<Tuple<string, string>>(from i in Context.Associations
-                                                          where i.Key.Item2 == root
-                                                          select i.Key);
-
-            while (results.Count <= Context.Associations.Count)
+        /// <summary>
+        /// Collection for registered types.
+        /// </summary>
+        private class RegistrationCollection : List<RegistrationNode>
+        {
+            public RegistrationCollection() { }
+            public RegistrationNode GetNode(Type type)
             {
-                //+ this should only iterate the number of hierarchies deep and no more
-                var x = from i in results
-                        join j in Context.Associations.Where(a => !roots.Contains(a.Key.Item1))
-                            on i.Item2 equals j.Key.Item1 into outer
-                        from k in outer.DefaultIfEmpty()
-                        where k.Key != null
-                        select k.Key;
-                if (x.Count() == 0) break;
-                results = results.Union(x).ToList();
-                //+ prevent recursive loop
-                roots.AddRange(x.Select(a => a.Item1).Distinct());
+                foreach (RegistrationNode rn in this)
+                    if (rn.Key.Equals(type)) return rn;
+                return null;
+
             }
 
-            return from i in Context.Associations
-                   join j in results.Distinct()
-                   on i.Key equals j
-                   select i.Value;
-        }
+            public Type[] GetRelatedTypes(Type type)
+            {
+                foreach (RegistrationNode rn in this)
+                    if (rn.Key.Equals(type)) return rn.Types.ToArray();
+                return Type.EmptyTypes;
+            }
 
-        public static void RegisterType(Type root, params Type[] related)
-        {
-            Context._RegisterType(root, related);
+            public bool ContainsNode(Type type)
+            {
+                foreach (RegistrationNode rn in this)
+                    if (rn.Key.Equals(type)) return true;
+                return false;
+            }
         }
-
-        #endregion Public Methods
     }
 }

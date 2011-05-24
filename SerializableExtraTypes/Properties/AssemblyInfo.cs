@@ -6,13 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SerializableExtraTypes")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("AMightyOak.Net")]
+[assembly: AssemblyDescription("Serialize Helper")]
+[assembly: AssemblyCompany("Daniel Gidman: danatcofo@triplei.com")]
 [assembly: AssemblyProduct("SerializableExtraTypes")]
-[assembly: AssemblyCopyright("Copyright © Dan Gidman 2011")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -20,7 +16,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("52d1b6e2-dee5-44fa-a520-9c11a9181b8d")]
+[assembly: Guid("67fb7834-48cf-4121-b967-53b256c89f50")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,8 +25,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
+// You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
